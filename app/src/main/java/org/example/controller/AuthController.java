@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 @AllArgsConstructor
 @RestController
 public class AuthController {
@@ -27,7 +30,7 @@ public class AuthController {
     @PostMapping("auth/v1/signup")
     public ResponseEntity Signup(@RequestBody UserInfoDto userInfoDto){
         try {
-           // System.out.println("Received userName: " + userInfoDto.getUserName());
+           //System.out.println("Received userName: " + userInfoDto.getFirstName());
             Boolean isSignUped=userDetailsServiceImpl.signUpUser(userInfoDto);
             if(Boolean.FALSE.equals(isSignUped)){
                 return  new ResponseEntity<>("User already exist", HttpStatus.BAD_REQUEST);
@@ -40,7 +43,12 @@ public class AuthController {
                     .token(refreshToken.getToken()).build(),HttpStatus.OK);
 
         }catch (Exception ex){
-            return new ResponseEntity<>("Exception in user service", HttpStatus.INTERNAL_SERVER_ERROR);
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            String stackTrace = sw.toString();
+
+            return new ResponseEntity<>(stackTrace, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

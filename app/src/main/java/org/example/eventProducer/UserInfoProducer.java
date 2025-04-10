@@ -2,6 +2,7 @@ package org.example.eventProducer;
 
 import org.example.model.UserInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -17,15 +18,28 @@ public class UserInfoProducer {
    @Value("${spring.kafka.topic.name}")
    private String TOPIC_NAME;
 
-   @Autowired
-   UserInfoProducer(KafkaTemplate<String,UserInfoDto> kafkaTemplate){
-        this.kafkaTemplate=kafkaTemplate;
+//   @Autowired
+//   UserInfoProducer(KafkaTemplate<String,UserInfoDto> kafkaTemplate){
+//        this.kafkaTemplate=kafkaTemplate;
+//
+//   }
 
-   }
+    public UserInfoProducer(@Qualifier("userInfoKafkaTemplate") KafkaTemplate<String, UserInfoDto> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
-   public void sendEventToKafka(UserInfoDto userInfoDto){
-       Message<UserInfoDto> message= MessageBuilder.withPayload(userInfoDto)
-               .setHeader(KafkaHeaders.TOPIC,TOPIC_NAME).build();
-       kafkaTemplate.send(message);
-   }
+//   public void sendEventToKafka(UserInfoDto userInfoDto){
+//       Message<UserInfoDto> message= MessageBuilder.withPayload(userInfoDto)
+//               .setHeader(KafkaHeaders.TOPIC,TOPIC_NAME).build();
+//       kafkaTemplate.send(message);
+//
+//   }
+
+    public void sendEventToKafka(UserInfoDto userInfoDto) {
+        Message<UserInfoDto> message = MessageBuilder
+                .withPayload(userInfoDto)
+                .setHeader(KafkaHeaders.TOPIC, TOPIC_NAME)
+                .build();
+        kafkaTemplate.send(message);
+    }
 }
