@@ -13,7 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 @Service
 public class UserInfoProducer {
-   private final KafkaTemplate<String, UserInfoDto> kafkaTemplate;
+   private final KafkaTemplate<String, UserInfoEvent> kafkaTemplate;
 
    @Value("${spring.kafka.topic.name}")
    private String TOPIC_NAME;
@@ -24,7 +24,7 @@ public class UserInfoProducer {
 //
 //   }
 
-    public UserInfoProducer(@Qualifier("userInfoKafkaTemplate") KafkaTemplate<String, UserInfoDto> kafkaTemplate) {
+    public UserInfoProducer(@Qualifier("userInfoKafkaTemplate") KafkaTemplate<String, UserInfoEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -35,9 +35,9 @@ public class UserInfoProducer {
 //
 //   }
 
-    public void sendEventToKafka(UserInfoDto userInfoDto) {
-        Message<UserInfoDto> message = MessageBuilder
-                .withPayload(userInfoDto)
+    public void sendEventToKafka(UserInfoEvent userInfoEvent) {
+        Message<UserInfoEvent> message = MessageBuilder
+                .withPayload(userInfoEvent)
                 .setHeader(KafkaHeaders.TOPIC, TOPIC_NAME)
                 .build();
         kafkaTemplate.send(message);

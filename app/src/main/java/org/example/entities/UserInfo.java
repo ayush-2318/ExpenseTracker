@@ -19,6 +19,7 @@ public class UserInfo {
 
     @Id
     @Column(name = "user_id")
+    @JsonProperty("UserId")
     private String UserId;
 
     @JsonProperty("userName")

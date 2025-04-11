@@ -2,6 +2,7 @@ package org.example.auth;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.example.eventProducer.UserInfoEvent;
 import org.example.model.UserInfoDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,7 @@ public class UserInfoProducerConfig {
         private String bootstrapServers;
 
         @Bean
-        public ProducerFactory<String, UserInfoDto> userInfoProducerFactory() {
+        public ProducerFactory<String, UserInfoEvent> userInfoProducerFactory() {
             Map<String, Object> configProps = new HashMap<>();
             configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
             configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -33,7 +34,7 @@ public class UserInfoProducerConfig {
         }
 
         @Bean
-        public KafkaTemplate<String, UserInfoDto> userInfoKafkaTemplate() {
+        public KafkaTemplate<String, UserInfoEvent> userInfoKafkaTemplate() {
             return new KafkaTemplate<>(userInfoProducerFactory());
         }
 

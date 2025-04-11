@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.entities.UserInfo;
+import org.example.eventProducer.UserInfoEvent;
 import org.example.eventProducer.UserInfoProducer;
 import org.example.model.UserInfoDto;
 import org.example.repository.UserRepository;
@@ -50,8 +51,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String id= UUID.randomUUID().toString();
         userRepository.save(new UserInfo(id, userInfoDto.getUserName(), userInfoDto.getPassword(), new HashSet<>()));
         // push event to queue
-        userInfoProducer.sendEventToKafka(userInfoDto);
+        userInfoProducer.sendEventToKafka(publishDtoToEvent(userInfoDto,id));
         return true;
+    }
+
+    private UserInfoEvent publishDtoToEvent(UserInfoDto userInfoDto,String id){
+        return UserInfoEvent.builder()
+                .firstName(userInfoDto.getFirstName())
+                .lastName(userInfoDto.getLastName())
+                .email(userInfoDto.getEmail())
+                .phoneNumber(userInfoDto.getPhoneNumber())
+                .userId(id)
+                .build();
     }
 
 

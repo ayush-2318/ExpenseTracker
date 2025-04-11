@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.Serializer;
+import org.example.eventProducer.UserInfoEvent;
 import org.example.model.UserInfoDto;
 
 import java.util.Map;
 
-public class UserInfoSerializer implements Serializer<UserInfoDto> {
+public class UserInfoSerializer implements Serializer<UserInfoEvent> {
 
     private final ObjectMapper objectMapper;
 
@@ -23,7 +24,7 @@ public class UserInfoSerializer implements Serializer<UserInfoDto> {
     }
 
     @Override
-    public byte[] serialize(String arg0, UserInfoDto arg1) {
+    public byte[] serialize(String arg0, UserInfoEvent arg1) {
         byte[] retVal=null;
        // ObjectMapper objectMapper=new ObjectMapper();
         //objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
