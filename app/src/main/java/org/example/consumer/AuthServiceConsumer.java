@@ -1,7 +1,10 @@
 package org.example.consumer;
 
 import org.apache.catalina.User;
+import org.example.entities.UserInfo;
+import org.example.entities.UserInfoDto;
 import org.example.repository.UserRepository;
+import org.example.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -13,14 +16,13 @@ public class AuthServiceConsumer {
     private UserRepository userRepository;
 
     @Autowired
-    AuthServiceConsumer(UserRepository userRepository){
-        this.userRepository=userRepository;
-    }
+    private UserService userService;
 
     @KafkaListener(topics = "testing2", groupId = "${spring.kafka.consumer.group-id}", containerFactory = "kafkaListenerContainerFactory")
-    public void listen(Object eventData){
+    public void listen(UserInfoDto eventData){
         try {
-                System.out.println("eventdata"+eventData);
+            // to make it transactional
+            userService.createOrUpdateUser(eventData);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

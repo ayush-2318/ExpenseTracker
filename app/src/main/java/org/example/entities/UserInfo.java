@@ -1,14 +1,17 @@
 package org.example.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
+import org.modelmapper.internal.bytebuddy.dynamic.loading.InjectionClassLoader;
 
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -17,8 +20,12 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class UserInfoDto {
+public class UserInfo {
 
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
+
+    @Id
     @JsonProperty("userId")
     private String userId;
 
@@ -36,14 +43,4 @@ public class UserInfoDto {
 
     @JsonProperty("profilePicture")
     private String profilePicture;
-
-    public UserInfo  transformToUserInfo(){
-        return UserInfo.builder().
-                userId(userId)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .phoneNumber(phoneNumber)
-                .profilePicture(profilePicture).build();
-    }
 }
