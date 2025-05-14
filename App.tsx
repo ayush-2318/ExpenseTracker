@@ -18,6 +18,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './src/app/Pages/Login';
+
+import Home from './src/app/Pages/Home';
 import SignUp from './src/app/Pages/SignUp';
 
 
@@ -31,6 +33,7 @@ function App(): React.JSX.Element {
     <Stack.Navigator>
       <Stack.Screen name='Login' component={Login}/>
       <Stack.Screen name='SignUp' component={SignUp}/>
+      <Stack.Screen name='Home' component={Home}/>
     </Stack.Navigator>
   </NavigationContainer>
   );
